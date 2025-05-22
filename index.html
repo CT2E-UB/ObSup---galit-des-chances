@@ -1,0 +1,1714 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>Les dispositifs portés par les établissements signataires de la convention de coordination territoriale Nouvelle-Aquitaine dans les collèges et les lycées, favorisant la diversité sociale et territoriale des étudiants dans l'accès à l'enseignement supérieur</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/QPV2024_1.js"></script>
+        <script src="data/QPV2024Bande300m_2.js"></script>
+        <script src="data/Limitesadministrativesdpartementales_3.js"></script>
+        <script src="data/Indicateurcroisdloignementgographiqueetdepositionsociale_4.js"></script>
+        <script src="data/CampusPoitiers_5.js"></script>
+        <script src="data/UniversitdePoitiers_6.js"></script>
+        <script src="data/BordeauxSciencesAgro_7.js"></script>
+        <script src="data/CampusUBM_8.js"></script>
+        <script src="data/UniversitBordeauxMontaigne_9.js"></script>
+        <script src="data/CampusUB_10.js"></script>
+        <script src="data/UniversitdeBordeaux_11.js"></script>
+        <script src="data/SciencesPoBordeaux_12.js"></script>
+        <script src="data/CampusUPPA_13.js"></script>
+        <script src="data/UniversitdePauetdesPaysdelAdour_14.js"></script>
+        <script src="data/CampusUniLim_15.js"></script>
+        <script src="data/UniversitdeLimoges_16.js"></script>
+        <script src="data/LaRochelleUniversit_17.js"></script>
+        <script src="data/BordeauxINP_18.js"></script>
+        <script src="data/Campusconnects_19.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:7
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
+          var tagName = event.target.tagName,
+            popup = map._popup;
+          // Also check if flag is already set.
+          if (tagName === "IMG" && popup && !popup._updated) {
+            popup._updated = true; // Set flag to prevent looping.
+            popup.update();
+          }
+        }, true);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        map.createPane('pane_Fonddecarte_0');
+        map.getPane('pane_Fonddecarte_0').style.zIndex = 400;
+        var layer_Fonddecarte_0 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_Fonddecarte_0',
+            opacity: 0.8,
+            attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
+            minZoom: 7,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_Fonddecarte_0;
+        map.addLayer(layer_Fonddecarte_0);
+        function pop_QPV2024_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Code_QP'] !== null ? autolinker.link(feature.properties['Code_QP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Lib_QP'] !== null ? autolinker.link(feature.properties['Lib_QP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Commune'] !== null ? autolinker.link(feature.properties['Commune'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_QPV2024_1_0() {
+            return {
+                pane: 'pane_QPV2024_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,182,54,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_QPV2024_1');
+        map.getPane('pane_QPV2024_1').style.zIndex = 401;
+        map.getPane('pane_QPV2024_1').style['mix-blend-mode'] = 'normal';
+        var layer_QPV2024_1 = new L.geoJson(json_QPV2024_1, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_QPV2024_1',
+            layerName: 'layer_QPV2024_1',
+            pane: 'pane_QPV2024_1',
+            onEachFeature: pop_QPV2024_1,
+            style: style_QPV2024_1_0,
+        });
+        bounds_group.addLayer(layer_QPV2024_1);
+        map.addLayer(layer_QPV2024_1);
+        function pop_QPV2024Bande300m_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Code_QP'] !== null ? autolinker.link(feature.properties['Code_QP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Lib_QP'] !== null ? autolinker.link(feature.properties['Lib_QP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Commune'] !== null ? autolinker.link(feature.properties['Commune'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_QPV2024Bande300m_2_0() {
+            return {
+                pane: 'pane_QPV2024Bande300m_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,182,54,0.28627450980392155)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_QPV2024Bande300m_2');
+        map.getPane('pane_QPV2024Bande300m_2').style.zIndex = 402;
+        map.getPane('pane_QPV2024Bande300m_2').style['mix-blend-mode'] = 'normal';
+        var layer_QPV2024Bande300m_2 = new L.geoJson(json_QPV2024Bande300m_2, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_QPV2024Bande300m_2',
+            layerName: 'layer_QPV2024Bande300m_2',
+            pane: 'pane_QPV2024Bande300m_2',
+            onEachFeature: pop_QPV2024Bande300m_2,
+            style: style_QPV2024Bande300m_2_0,
+        });
+        bounds_group.addLayer(layer_QPV2024Bande300m_2);
+        map.addLayer(layer_QPV2024Bande300m_2);
+        function pop_Limitesadministrativesdpartementales_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ID_GEOFLA'] !== null ? autolinker.link(feature.properties['ID_GEOFLA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CODE_DEPT'] !== null ? autolinker.link(feature.properties['CODE_DEPT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOM_DEPT'] !== null ? autolinker.link(feature.properties['NOM_DEPT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CODE_CHF'] !== null ? autolinker.link(feature.properties['CODE_CHF'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOM_CHF'] !== null ? autolinker.link(feature.properties['NOM_CHF'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['X_CHF_LIEU'] !== null ? autolinker.link(feature.properties['X_CHF_LIEU'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Y_CHF_LIEU'] !== null ? autolinker.link(feature.properties['Y_CHF_LIEU'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['X_CENTROID'] !== null ? autolinker.link(feature.properties['X_CENTROID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Y_CENTROID'] !== null ? autolinker.link(feature.properties['Y_CENTROID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CODE_REG'] !== null ? autolinker.link(feature.properties['CODE_REG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOM_REG'] !== null ? autolinker.link(feature.properties['NOM_REG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['B_Effectif'] !== null ? autolinker.link(feature.properties['B_Effectif'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['B_Tx_DEPBA'] !== null ? autolinker.link(feature.properties['B_Tx_DEPBA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['B_Tx_DEP_1'] !== null ? autolinker.link(feature.properties['B_Tx_DEP_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['R_EFFECIF_'] !== null ? autolinker.link(feature.properties['R_EFFECIF_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['R_Tx_DepRe'] !== null ? autolinker.link(feature.properties['R_Tx_DepRe'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['R_Tx_Dep_1'] !== null ? autolinker.link(feature.properties['R_Tx_Dep_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['IPS_mean'] !== null ? autolinker.link(feature.properties['IPS_mean'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_Limitesadministrativesdpartementales_3_0() {
+            return {
+                pane: 'pane_Limitesadministrativesdpartementales_3',
+                opacity: 1,
+                color: 'rgba(82,82,82,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(204,204,204,0.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Limitesadministrativesdpartementales_3');
+        map.getPane('pane_Limitesadministrativesdpartementales_3').style.zIndex = 403;
+        map.getPane('pane_Limitesadministrativesdpartementales_3').style['mix-blend-mode'] = 'normal';
+        var layer_Limitesadministrativesdpartementales_3 = new L.geoJson(json_Limitesadministrativesdpartementales_3, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Limitesadministrativesdpartementales_3',
+            layerName: 'layer_Limitesadministrativesdpartementales_3',
+            pane: 'pane_Limitesadministrativesdpartementales_3',
+            onEachFeature: pop_Limitesadministrativesdpartementales_3,
+            style: style_Limitesadministrativesdpartementales_3_0,
+        });
+        bounds_group.addLayer(layer_Limitesadministrativesdpartementales_3);
+        map.addLayer(layer_Limitesadministrativesdpartementales_3);
+        function pop_Indicateurcroisdloignementgographiqueetdepositionsociale_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Nom du lycée ou du collège</th>\
+                        <td class="visible-with-data" id="Nom lycee/">' + (feature.properties['Nom lycee/'] !== null ? autolinker.link(feature.properties['Nom lycee/'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Catégorie du collège</th>\
+                        <td class="visible-with-data" id="Indic Coll">' + (feature.properties['Indic Coll'] !== null ? autolinker.link(feature.properties['Indic Coll'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Catégorie du lycée</th>\
+                        <td class="visible-with-data" id="Indic Lyc">' + (feature.properties['Indic Lyc'] !== null ? autolinker.link(feature.properties['Indic Lyc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Situation relative à un QPV</th>\
+                        <td class="visible-with-data" id="QPV">' + (feature.properties['QPV'] !== null ? autolinker.link(feature.properties['QPV'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Education prioritaire</th>\
+                        <td class="visible-with-data" id="REP">' + (feature.properties['REP'] !== null ? autolinker.link(feature.properties['REP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Dispositif d\'égalité des chances</th>\
+                        <td class="visible-with-data" id="Dispositif">' + (feature.properties['Dispositif'] !== null ? autolinker.link(feature.properties['Dispositif'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Disp_Port'] !== null ? autolinker.link(feature.properties['Disp_Port'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">IPS du lycée</th>\
+                        <td class="visible-with-data" id="IPS_lyc">' + (feature.properties['IPS_lyc'] !== null ? autolinker.link(feature.properties['IPS_lyc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">IPS du collège</th>\
+                        <td class="visible-with-data" id="IPS_Colleg">' + (feature.properties['IPS_Colleg'] !== null ? autolinker.link(feature.properties['IPS_Colleg'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['IPS_NA'] !== null ? autolinker.link(feature.properties['IPS_NA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['IPS_Fr'] !== null ? autolinker.link(feature.properties['IPS_Fr'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Indice d\'éloignement du lycée</th>\
+                        <td class="visible-with-data" id="IEL_lyc">' + (feature.properties['IEL_lyc'] !== null ? autolinker.link(feature.properties['IEL_lyc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Indice d\'éloignement du collège</th>\
+                        <td class="visible-with-data" id="IEG_Colleg">' + (feature.properties['IEG_Colleg'] !== null ? autolinker.link(feature.properties['IEG_Colleg'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['IEL_NA'] !== null ? autolinker.link(feature.properties['IEL_NA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['IEL_FR'] !== null ? autolinker.link(feature.properties['IEL_FR'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['U Poitiers'] !== null ? autolinker.link(feature.properties['U Poitiers'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nombre d\'heure d\'enseignement par élève</th>\
+                        <td class="visible-with-data" id="H/E">' + (feature.properties['H/E'] !== null ? autolinker.link(feature.properties['H/E'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Taux de réussite bac GT</th>\
+                        <td class="visible-with-data" id="R_BacGT">' + (feature.properties['R_BacGT'] !== null ? autolinker.link(feature.properties['R_BacGT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Taux de réussite bac Pro</th>\
+                        <td class="visible-with-data" id="R_BacPro">' + (feature.properties['R_BacPro'] !== null ? autolinker.link(feature.properties['R_BacPro'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Taux de réussite au brevet</th>\
+                        <td class="visible-with-data" id="R_DNB">' + (feature.properties['R_DNB'] !== null ? autolinker.link(feature.properties['R_DNB'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+        function style_Indicateurcroisdloignementgographiqueetdepositionsociale_4_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule0_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(97,31,83,0.47058823529411764)',
+                interactive: true,
+            };
+                }
+                else if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(203,27,79,0.5490196078431373)',
+                interactive: true,
+            };
+                }
+                else if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule2_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,136,96,0.5254901960784314)',
+                interactive: true,
+            };
+                }
+                else if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule3_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,245,240,0.8392156862745098)',
+                interactive: true,
+            };
+                }
+                else if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule4_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 4.4,
+                opacity: 1,
+                color: 'rgba(141,90,153,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule5_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 4.4,
+                opacity: 1,
+                color: 'rgba(194,28,77,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule6_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 4.4,
+                opacity: 1,
+                color: 'rgba(253,191,111,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule7_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 4.4,
+                opacity: 1,
+                color: 'rgba(255,245,240,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule8_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(255,255,255,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(145,82,45,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Indicateurcroisdloignementgographiqueetdepositionsociale_4rule9_eval_expression(context)) {
+                  return {
+                pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(255,255,255,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(198,218,219,1.0)',
+                interactive: true,
+            };
+                }
+            else {
+                return {fill: false, stroke: false};
+            }
+        }
+        map.createPane('pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4');
+        map.getPane('pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4').style.zIndex = 404;
+        map.getPane('pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4').style['mix-blend-mode'] = 'normal';
+        var layer_Indicateurcroisdloignementgographiqueetdepositionsociale_4 = new L.geoJson(json_Indicateurcroisdloignementgographiqueetdepositionsociale_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+            layerName: 'layer_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+            pane: 'pane_Indicateurcroisdloignementgographiqueetdepositionsociale_4',
+            onEachFeature: pop_Indicateurcroisdloignementgographiqueetdepositionsociale_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Indicateurcroisdloignementgographiqueetdepositionsociale_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Indicateurcroisdloignementgographiqueetdepositionsociale_4);
+        map.addLayer(layer_Indicateurcroisdloignementgographiqueetdepositionsociale_4);
+        function pop_CampusPoitiers_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Etablissem'] !== null ? autolinker.link(feature.properties['Etablissem'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Campus </th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_CampusPoitiers_5_0() {
+            return {
+                pane: 'pane_CampusPoitiers_5',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/CampusPoitiers_5.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_CampusPoitiers_5');
+        map.getPane('pane_CampusPoitiers_5').style.zIndex = 405;
+        map.getPane('pane_CampusPoitiers_5').style['mix-blend-mode'] = 'normal';
+        var layer_CampusPoitiers_5 = new L.geoJson(json_CampusPoitiers_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CampusPoitiers_5',
+            layerName: 'layer_CampusPoitiers_5',
+            pane: 'pane_CampusPoitiers_5',
+            onEachFeature: pop_CampusPoitiers_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_CampusPoitiers_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_CampusPoitiers_5);
+        map.addLayer(layer_CampusPoitiers_5);
+        function pop_UniversitdePoitiers_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td>' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porteur</th>\
+                        <td class="visible-with-data" id="Porteur">' + (feature.properties['Porteur'] !== null ? autolinker.link(feature.properties['Porteur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lien'] !== null ? autolinker.link(feature.properties['lien'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">contact</th>\
+                        <td class="visible-with-data" id="contact">' + (feature.properties['contact'] !== null ? autolinker.link(feature.properties['contact'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['USE'] !== null ? '<img src="images/' + String(feature.properties['USE']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_UniversitdePoitiers_6_0() {
+            return {
+                pane: 'pane_UniversitdePoitiers_6',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/UniversitdePoitiers_6.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_UniversitdePoitiers_6');
+        map.getPane('pane_UniversitdePoitiers_6').style.zIndex = 406;
+        map.getPane('pane_UniversitdePoitiers_6').style['mix-blend-mode'] = 'normal';
+        var layer_UniversitdePoitiers_6 = new L.geoJson(json_UniversitdePoitiers_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_UniversitdePoitiers_6',
+            layerName: 'layer_UniversitdePoitiers_6',
+            pane: 'pane_UniversitdePoitiers_6',
+            onEachFeature: pop_UniversitdePoitiers_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_UniversitdePoitiers_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_UniversitdePoitiers_6);
+        map.addLayer(layer_UniversitdePoitiers_6);
+        function pop_BordeauxSciencesAgro_7(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porteur</th>\
+                        <td class="visible-with-data" id="Porteur">' + (feature.properties['Porteur'] !== null ? autolinker.link(feature.properties['Porteur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Actions à destination des lycéens</strong><br />' + (feature.properties['l1'] !== null ? autolinker.link(feature.properties['l1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lien'] !== null ? autolinker.link(feature.properties['lien'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">contact</th>\
+                        <td class="visible-with-data" id="contact">' + (feature.properties['contact'] !== null ? autolinker.link(feature.properties['contact'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['USE2'] !== null ? '<img src="images/' + String(feature.properties['USE2']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_BordeauxSciencesAgro_7_0() {
+            return {
+                pane: 'pane_BordeauxSciencesAgro_7',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/BordeauxSciencesAgro_7.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_BordeauxSciencesAgro_7');
+        map.getPane('pane_BordeauxSciencesAgro_7').style.zIndex = 407;
+        map.getPane('pane_BordeauxSciencesAgro_7').style['mix-blend-mode'] = 'normal';
+        var layer_BordeauxSciencesAgro_7 = new L.geoJson(json_BordeauxSciencesAgro_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_BordeauxSciencesAgro_7',
+            layerName: 'layer_BordeauxSciencesAgro_7',
+            pane: 'pane_BordeauxSciencesAgro_7',
+            onEachFeature: pop_BordeauxSciencesAgro_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_BordeauxSciencesAgro_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_BordeauxSciencesAgro_7);
+        map.addLayer(layer_BordeauxSciencesAgro_7);
+        function pop_CampusUBM_8(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Etablissement</th>\
+                        <td>' + (feature.properties['Etablissem'] !== null ? autolinker.link(feature.properties['Etablissem'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Campus / site</th>\
+                        <td>' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_CampusUBM_8_0() {
+            return {
+                pane: 'pane_CampusUBM_8',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/CampusUBM_8.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_CampusUBM_8');
+        map.getPane('pane_CampusUBM_8').style.zIndex = 408;
+        map.getPane('pane_CampusUBM_8').style['mix-blend-mode'] = 'normal';
+        var layer_CampusUBM_8 = new L.geoJson(json_CampusUBM_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CampusUBM_8',
+            layerName: 'layer_CampusUBM_8',
+            pane: 'pane_CampusUBM_8',
+            onEachFeature: pop_CampusUBM_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_CampusUBM_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_CampusUBM_8);
+        map.addLayer(layer_CampusUBM_8);
+        function pop_UniversitBordeauxMontaigne_9(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porteur</th>\
+                        <td>' + (feature.properties['Porteur'] !== null ? autolinker.link(feature.properties['Porteur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Actions à destination des lycéens</strong><br />' + (feature.properties['l1'] !== null ? autolinker.link(feature.properties['l1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lien'] !== null ? autolinker.link(feature.properties['lien'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">contact</th>\
+                        <td class="visible-with-data" id="contact">' + (feature.properties['contact'] !== null ? autolinker.link(feature.properties['contact'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['USE2'] !== null ? '<img src="images/' + String(feature.properties['USE2']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_UniversitBordeauxMontaigne_9_0() {
+            return {
+                pane: 'pane_UniversitBordeauxMontaigne_9',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/UniversitBordeauxMontaigne_9.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_UniversitBordeauxMontaigne_9');
+        map.getPane('pane_UniversitBordeauxMontaigne_9').style.zIndex = 409;
+        map.getPane('pane_UniversitBordeauxMontaigne_9').style['mix-blend-mode'] = 'normal';
+        var layer_UniversitBordeauxMontaigne_9 = new L.geoJson(json_UniversitBordeauxMontaigne_9, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_UniversitBordeauxMontaigne_9',
+            layerName: 'layer_UniversitBordeauxMontaigne_9',
+            pane: 'pane_UniversitBordeauxMontaigne_9',
+            onEachFeature: pop_UniversitBordeauxMontaigne_9,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_UniversitBordeauxMontaigne_9_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_UniversitBordeauxMontaigne_9);
+        map.addLayer(layer_UniversitBordeauxMontaigne_9);
+        function pop_CampusUB_10(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Etablissement</th>\
+                        <td class="visible-with-data" id="Etablissem">' + (feature.properties['Etablissem'] !== null ? autolinker.link(feature.properties['Etablissem'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Campus/site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_CampusUB_10_0() {
+            return {
+                pane: 'pane_CampusUB_10',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/CampusUB_10.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_CampusUB_10');
+        map.getPane('pane_CampusUB_10').style.zIndex = 410;
+        map.getPane('pane_CampusUB_10').style['mix-blend-mode'] = 'normal';
+        var layer_CampusUB_10 = new L.geoJson(json_CampusUB_10, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CampusUB_10',
+            layerName: 'layer_CampusUB_10',
+            pane: 'pane_CampusUB_10',
+            onEachFeature: pop_CampusUB_10,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_CampusUB_10_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_CampusUB_10);
+        map.addLayer(layer_CampusUB_10);
+        function pop_UniversitdeBordeaux_11(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Campus/site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porteur</th>\
+                        <td class="visible-with-data" id="Porteur">' + (feature.properties['Porteur'] !== null ? autolinker.link(feature.properties['Porteur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Plan d\'action à destination du 2nd degré</strong><br />' + (feature.properties['Plan actio'] !== null ? autolinker.link(feature.properties['Plan actio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['l1'] !== null ? autolinker.link(feature.properties['l1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['l2'] !== null ? autolinker.link(feature.properties['l2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lien'] !== null ? autolinker.link(feature.properties['lien'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">contact</th>\
+                        <td class="visible-with-data" id="contact">' + (feature.properties['contact'] !== null ? autolinker.link(feature.properties['contact'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['USE'] !== null ? '<img src="images/' + String(feature.properties['USE']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_UniversitdeBordeaux_11_0() {
+            return {
+                pane: 'pane_UniversitdeBordeaux_11',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/UniversitdeBordeaux_11.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_UniversitdeBordeaux_11');
+        map.getPane('pane_UniversitdeBordeaux_11').style.zIndex = 411;
+        map.getPane('pane_UniversitdeBordeaux_11').style['mix-blend-mode'] = 'normal';
+        var layer_UniversitdeBordeaux_11 = new L.geoJson(json_UniversitdeBordeaux_11, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_UniversitdeBordeaux_11',
+            layerName: 'layer_UniversitdeBordeaux_11',
+            pane: 'pane_UniversitdeBordeaux_11',
+            onEachFeature: pop_UniversitdeBordeaux_11,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_UniversitdeBordeaux_11_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_UniversitdeBordeaux_11);
+        map.addLayer(layer_UniversitdeBordeaux_11);
+        function pop_SciencesPoBordeaux_12(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porteur</th>\
+                        <td class="visible-with-data" id="Porteur">' + (feature.properties['Porteur'] !== null ? autolinker.link(feature.properties['Porteur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Actions à destination des lycéens</strong><br />' + (feature.properties['l1'] !== null ? autolinker.link(feature.properties['l1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lien'] !== null ? autolinker.link(feature.properties['lien'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">contact</th>\
+                        <td class="visible-with-data" id="contact">' + (feature.properties['contact'] !== null ? autolinker.link(feature.properties['contact'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['USE2'] !== null ? '<img src="images/' + String(feature.properties['USE2']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_SciencesPoBordeaux_12_0() {
+            return {
+                pane: 'pane_SciencesPoBordeaux_12',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/SciencesPoBordeaux_12.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_SciencesPoBordeaux_12');
+        map.getPane('pane_SciencesPoBordeaux_12').style.zIndex = 412;
+        map.getPane('pane_SciencesPoBordeaux_12').style['mix-blend-mode'] = 'normal';
+        var layer_SciencesPoBordeaux_12 = new L.geoJson(json_SciencesPoBordeaux_12, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_SciencesPoBordeaux_12',
+            layerName: 'layer_SciencesPoBordeaux_12',
+            pane: 'pane_SciencesPoBordeaux_12',
+            onEachFeature: pop_SciencesPoBordeaux_12,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_SciencesPoBordeaux_12_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_SciencesPoBordeaux_12);
+        map.addLayer(layer_SciencesPoBordeaux_12);
+        function pop_CampusUPPA_13(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Etablissement</th>\
+                        <td class="visible-with-data" id="Etablissem">' + (feature.properties['Etablissem'] !== null ? autolinker.link(feature.properties['Etablissem'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_CampusUPPA_13_0() {
+            return {
+                pane: 'pane_CampusUPPA_13',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/CampusUPPA_13.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_CampusUPPA_13');
+        map.getPane('pane_CampusUPPA_13').style.zIndex = 413;
+        map.getPane('pane_CampusUPPA_13').style['mix-blend-mode'] = 'normal';
+        var layer_CampusUPPA_13 = new L.geoJson(json_CampusUPPA_13, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CampusUPPA_13',
+            layerName: 'layer_CampusUPPA_13',
+            pane: 'pane_CampusUPPA_13',
+            onEachFeature: pop_CampusUPPA_13,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_CampusUPPA_13_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_CampusUPPA_13);
+        map.addLayer(layer_CampusUPPA_13);
+        function pop_UniversitdePauetdesPaysdelAdour_14(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porteur</th>\
+                        <td class="visible-with-data" id="Porteur">' + (feature.properties['Porteur'] !== null ? autolinker.link(feature.properties['Porteur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Actions à destination des lycéens</strong><br />' + (feature.properties['l1'] !== null ? autolinker.link(feature.properties['l1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lien'] !== null ? autolinker.link(feature.properties['lien'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">contact</th>\
+                        <td class="visible-with-data" id="contact">' + (feature.properties['contact'] !== null ? autolinker.link(feature.properties['contact'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['USE2'] !== null ? '<img src="images/' + String(feature.properties['USE2']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_UniversitdePauetdesPaysdelAdour_14_0() {
+            return {
+                pane: 'pane_UniversitdePauetdesPaysdelAdour_14',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/UniversitdePauetdesPaysdelAdour_14.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_UniversitdePauetdesPaysdelAdour_14');
+        map.getPane('pane_UniversitdePauetdesPaysdelAdour_14').style.zIndex = 414;
+        map.getPane('pane_UniversitdePauetdesPaysdelAdour_14').style['mix-blend-mode'] = 'normal';
+        var layer_UniversitdePauetdesPaysdelAdour_14 = new L.geoJson(json_UniversitdePauetdesPaysdelAdour_14, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_UniversitdePauetdesPaysdelAdour_14',
+            layerName: 'layer_UniversitdePauetdesPaysdelAdour_14',
+            pane: 'pane_UniversitdePauetdesPaysdelAdour_14',
+            onEachFeature: pop_UniversitdePauetdesPaysdelAdour_14,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_UniversitdePauetdesPaysdelAdour_14_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_UniversitdePauetdesPaysdelAdour_14);
+        map.addLayer(layer_UniversitdePauetdesPaysdelAdour_14);
+        function pop_CampusUniLim_15(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Etablissement</th>\
+                        <td class="visible-with-data" id="Etablissem">' + (feature.properties['Etablissem'] !== null ? autolinker.link(feature.properties['Etablissem'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_CampusUniLim_15_0() {
+            return {
+                pane: 'pane_CampusUniLim_15',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/CampusUniLim_15.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_CampusUniLim_15');
+        map.getPane('pane_CampusUniLim_15').style.zIndex = 415;
+        map.getPane('pane_CampusUniLim_15').style['mix-blend-mode'] = 'normal';
+        var layer_CampusUniLim_15 = new L.geoJson(json_CampusUniLim_15, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CampusUniLim_15',
+            layerName: 'layer_CampusUniLim_15',
+            pane: 'pane_CampusUniLim_15',
+            onEachFeature: pop_CampusUniLim_15,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_CampusUniLim_15_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_CampusUniLim_15);
+        map.addLayer(layer_CampusUniLim_15);
+        function pop_UniversitdeLimoges_16(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Actions à destination des lycéens</th>\
+                        <td class="visible-with-data" id="Porteur">' + (feature.properties['Porteur'] !== null ? autolinker.link(feature.properties['Porteur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Actions à destination des lycéens</strong><br />' + (feature.properties['l1'] !== null ? autolinker.link(feature.properties['l1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lien'] !== null ? autolinker.link(feature.properties['lien'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">contact</th>\
+                        <td class="visible-with-data" id="contact">' + (feature.properties['contact'] !== null ? autolinker.link(feature.properties['contact'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['USE2'] !== null ? '<img src="images/' + String(feature.properties['USE2']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_UniversitdeLimoges_16_0() {
+            return {
+                pane: 'pane_UniversitdeLimoges_16',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/UniversitdeLimoges_16.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_UniversitdeLimoges_16');
+        map.getPane('pane_UniversitdeLimoges_16').style.zIndex = 416;
+        map.getPane('pane_UniversitdeLimoges_16').style['mix-blend-mode'] = 'normal';
+        var layer_UniversitdeLimoges_16 = new L.geoJson(json_UniversitdeLimoges_16, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_UniversitdeLimoges_16',
+            layerName: 'layer_UniversitdeLimoges_16',
+            pane: 'pane_UniversitdeLimoges_16',
+            onEachFeature: pop_UniversitdeLimoges_16,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_UniversitdeLimoges_16_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_UniversitdeLimoges_16);
+        map.addLayer(layer_UniversitdeLimoges_16);
+        function pop_LaRochelleUniversit_17(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porteur</th>\
+                        <td>' + (feature.properties['Porteur'] !== null ? autolinker.link(feature.properties['Porteur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Actions à destination des lycéens</strong><br />' + (feature.properties['l1'] !== null ? autolinker.link(feature.properties['l1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lien'] !== null ? autolinker.link(feature.properties['lien'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">contact</th>\
+                        <td class="visible-with-data" id="contact">' + (feature.properties['contact'] !== null ? autolinker.link(feature.properties['contact'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['USE2'] !== null ? '<img src="images/' + String(feature.properties['USE2']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_LaRochelleUniversit_17_0() {
+            return {
+                pane: 'pane_LaRochelleUniversit_17',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/LaRochelleUniversit_17.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_LaRochelleUniversit_17');
+        map.getPane('pane_LaRochelleUniversit_17').style.zIndex = 417;
+        map.getPane('pane_LaRochelleUniversit_17').style['mix-blend-mode'] = 'normal';
+        var layer_LaRochelleUniversit_17 = new L.geoJson(json_LaRochelleUniversit_17, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_LaRochelleUniversit_17',
+            layerName: 'layer_LaRochelleUniversit_17',
+            pane: 'pane_LaRochelleUniversit_17',
+            onEachFeature: pop_LaRochelleUniversit_17,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_LaRochelleUniversit_17_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_LaRochelleUniversit_17);
+        map.addLayer(layer_LaRochelleUniversit_17);
+        function pop_BordeauxINP_18(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Campus/Site</th>\
+                        <td class="visible-with-data" id="Site_Campu">' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porteur</th>\
+                        <td class="visible-with-data" id="Porteur">' + (feature.properties['Porteur'] !== null ? autolinker.link(feature.properties['Porteur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Actions à destination des lycéens</strong><br />' + (feature.properties['l1'] !== null ? autolinker.link(feature.properties['l1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lien'] !== null ? autolinker.link(feature.properties['lien'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">contact</th>\
+                        <td class="visible-with-data" id="contact">' + (feature.properties['contact'] !== null ? autolinker.link(feature.properties['contact'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['USE2'] !== null ? '<img src="images/' + String(feature.properties['USE2']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_BordeauxINP_18_0() {
+            return {
+                pane: 'pane_BordeauxINP_18',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/BordeauxINP_18.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_BordeauxINP_18');
+        map.getPane('pane_BordeauxINP_18').style.zIndex = 418;
+        map.getPane('pane_BordeauxINP_18').style['mix-blend-mode'] = 'normal';
+        var layer_BordeauxINP_18 = new L.geoJson(json_BordeauxINP_18, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_BordeauxINP_18',
+            layerName: 'layer_BordeauxINP_18',
+            pane: 'pane_BordeauxINP_18',
+            onEachFeature: pop_BordeauxINP_18,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_BordeauxINP_18_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_BordeauxINP_18);
+        map.addLayer(layer_BordeauxINP_18);
+        function pop_Campusconnects_19(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Université de proximité</th>\
+                        <td>' + (feature.properties['Etablissem'] !== null ? autolinker.link(feature.properties['Etablissem'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Campus </th>\
+                        <td>' + (feature.properties['Site_Campu'] !== null ? autolinker.link(feature.properties['Site_Campu'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_Campusconnects_19_0() {
+            return {
+                pane: 'pane_Campusconnects_19',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/Campusconnects_19.svg',
+            iconSize: [57.0, 57.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Campusconnects_19');
+        map.getPane('pane_Campusconnects_19').style.zIndex = 419;
+        map.getPane('pane_Campusconnects_19').style['mix-blend-mode'] = 'normal';
+        var layer_Campusconnects_19 = new L.geoJson(json_Campusconnects_19, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Campusconnects_19',
+            layerName: 'layer_Campusconnects_19',
+            pane: 'pane_Campusconnects_19',
+            onEachFeature: pop_Campusconnects_19,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Campusconnects_19_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Campusconnects_19);
+        map.addLayer(layer_Campusconnects_19);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>Les dispositifs portés par les établissements signataires de la convention de coordination territoriale Nouvelle-Aquitaine dans les collèges et les lycées, favorisant la diversité sociale et territoriale des étudiants dans l\'accès à l\'enseignement supérieur</h2>';
+            };
+            title.addTo(map);
+            var abstract = new L.Control({'position':'bottomleft'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+                    this._div.setAttribute("onmouseenter", "abstract.show()");
+                    this._div.setAttribute("onmouseleave", "abstract.hide()");
+                    this.hide();
+                    return this._div;
+                };
+                abstract.hide = function () {
+                    this._div.classList.remove("abstractUncollapsed");
+                    this._div.classList.add("abstract");
+                    this._div.innerHTML = 'i'
+                }
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'Cette carte représente les indicateurs d\'IPS et d\'éloignement des lycées et des collèges de la Région Nouvelle Aquitaine selon le nombre de dispositifs d\'égalité des chances portés par les établissements de l\'ESR signataires de la Convention de coordination territoriale Nouvelle Aquitaine.<br /><br />Données : <br /><br />- IPS = l\'Indice de position sociale résume le capital social, économique et culturel de la famille dans le rapport de l\'élève à l\'école. La valeur de l\'IPS est d\'autant plus élevée que la PCS est considérée comme favorable à la réussite scolaire de l\'élève. Dans la région, cette indice pour les lycées varie de 69 à 145, et de 64 à 145 pour les collèges. L’IPS d’une PCS donnée est ainsi le résumé quantitatif d’un certain nombre d’attributs socio-économiques et culturels favorables à la réussite scolaire, que l’on retrouve en moyenne pour cette PCS. <br /><br />- Indice d\'éloignement à l\'ESR = Cet indice permet de synthétiser en un indicateur la notion d\'éloignement pour un établissement donné. Il permet de prendre en compte les différents aspects de la ruralité et de l\'éloignement des établissements ainsi que de classer tous les établissements de manière continue, du moins "éloigné" au plus "éloigné" et de fournir ainsi une approche relative. 4 variables sont prises en compte pour calculer cet indice : <br />  <br />·         L’éloignement des élèves scolarisés dans l’établissement : éloignement moyen entre la résidence des élèves et leur établissement, proportion d’élèves résidant dans une commune rurale éloignée <br />·         L’éloignement de l’établissement par rapport à l’offre d’enseignement : densité en collèges ou lycées aux alentours, éloignement aux formations de niveau collège, lycée ou de l’enseignement supérieur les plus proches <br />·         L’éloignement de l’établissement par rapport à des équipements théâtres, gymnases, gares ferroviaires, etc<br /><br /><br />- Dispositifs d\'égalité des chances portés par les établissements de la CCT, recensés au 30 janvier 2023, comprenant : les cordées de la réussite (JPPJV et hors JPPJV), les grands projets PIA (ACCES et CODA) ainsi que le dispositif Pass\'en Sup.<br /><br />Champs : <br /><br />Les indices par établissement sont calculés pour les lycées de France métropolitaine et DROM, publics et privés sous contrat, à partir des données de la rentrée N et pour les élèves du second cycle uniquement. Les indices de chaque établissement sont déclinés pour les élèves de la voie générale et technologique uniquement, pour les élèves de la voie professionnelle uniquement, et pour l’ensemble des élèves du second cycle.<br /><br /><br />Description de l\'indicateur composite :<br /><br />Un lycée est défavorisé (respectivement favorisé) lorsque son IPS est inférieur (supérieur) à la médiane de l\'IPS des lycées de la région ;<br />Un lycée est éloigné (respectivement proche) lorsque son indice d\'éloignement est supérieur (inférieur) à la médiane de l\'indice d\'éloignement des lycées de la région ; <br />Un collège est favorisé lorsque son IPS est supérieur à la médiane de l\'IPS des collèges de la région. <br /><br />Sources : <br /><br />Mission d\'appui à l\'orientation et l\'insertion professionnelle (MAOIP), Université de Bordeaux<br />Direction de l\'évaluation, de la prospective et de la performance (DEPP), Minstère de l\'éducation nationale (MEN)<br /><br />Cartographie : <br /><br />Service de coordination des études et enquêtes (CT2E), Université de Bordeaux ';
+            };
+            abstract.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Campusconnects_19.png" /> Campus connectés': layer_Campusconnects_19,'<img src="legend/BordeauxINP_18.png" /> Bordeaux INP': layer_BordeauxINP_18,'<img src="legend/LaRochelleUniversit_17.png" /> La Rochelle Université': layer_LaRochelleUniversit_17,'<img src="legend/UniversitdeLimoges_16.png" /> Université de Limoges': layer_UniversitdeLimoges_16,'<img src="legend/CampusUniLim_15.png" /> Campus UniLim': layer_CampusUniLim_15,'<img src="legend/UniversitdePauetdesPaysdelAdour_14.png" /> Université de Pau et des Pays de l\'Adour': layer_UniversitdePauetdesPaysdelAdour_14,'<img src="legend/CampusUPPA_13.png" /> Campus UPPA': layer_CampusUPPA_13,'<img src="legend/SciencesPoBordeaux_12.png" /> Sciences Po Bordeaux': layer_SciencesPoBordeaux_12,'<img src="legend/UniversitdeBordeaux_11.png" /> Université de Bordeaux': layer_UniversitdeBordeaux_11,'<img src="legend/CampusUB_10.png" /> Campus UB': layer_CampusUB_10,'<img src="legend/UniversitBordeauxMontaigne_9.png" /> Université Bordeaux Montaigne': layer_UniversitBordeauxMontaigne_9,'<img src="legend/CampusUBM_8.png" /> Campus UBM': layer_CampusUBM_8,'<img src="legend/BordeauxSciencesAgro_7.png" /> Bordeaux Sciences Agro': layer_BordeauxSciencesAgro_7,'<img src="legend/UniversitdePoitiers_6.png" /> Université de Poitiers': layer_UniversitdePoitiers_6,'<img src="legend/CampusPoitiers_5.png" /> Campus Poitiers': layer_CampusPoitiers_5,'Indicateur croisé d\'éloignement géographique et de position sociale<br /><table><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_Lycéesdéfavorisésetéloignés0.png" /></td><td>Lycées défavorisés et éloignés</td></tr><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_Lycéesdéfavorisésetproches1.png" /></td><td>Lycées défavorisés et proches</td></tr><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_Lycéesfavorisésetéloignés2.png" /></td><td>Lycées favorisés et éloignés</td></tr><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_Lycéesfavorisésetproches3.png" /></td><td>Lycées favorisés et proches</td></tr><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_Collègesdéfavorisésetéloignés4.png" /></td><td>Collèges défavorisés et éloignés</td></tr><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_Collègesdéfavorisésetproches5.png" /></td><td>Collèges défavorisés et proches</td></tr><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_Collègesfavorisésetéloignés6.png" /></td><td>Collèges favorisés et éloignés</td></tr><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_Collègesfavorisésetproches7.png" /></td><td>Collèges favorisés et proches</td></tr><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_MFR8.png" /></td><td>MFR</td></tr><tr><td style="text-align: center;"><img src="legend/Indicateurcroisdloignementgographiqueetdepositionsociale_4_CFA9.png" /></td><td>CFA</td></tr></table>': layer_Indicateurcroisdloignementgographiqueetdepositionsociale_4,'<img src="legend/Limitesadministrativesdpartementales_3.png" /> Limites administratives départementales': layer_Limitesadministrativesdpartementales_3,'<img src="legend/QPV2024Bande300m_2.png" /> QPV 2024 - Bande 300m': layer_QPV2024Bande300m_2,'<img src="legend/QPV2024_1.png" /> QPV 2024': layer_QPV2024_1,"Fond de carte": layer_Fonddecarte_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_Indicateurcroisdloignementgographiqueetdepositionsociale_4,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'Nom lycee/'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Dispositif": "int","Indic Coll": "str","Indic Lyc": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Dispositif = document.createElement("div");
+            div_Dispositif.id = "div_Dispositif";
+            div_Dispositif.className = "slider";
+            document.getElementById("menu").appendChild(div_Dispositif);
+            var lab_Dispositif = document.createElement('div');
+            lab_Dispositif.innerHTML  = 'Dispositif: <span id="val_Dispositif"></span>';
+            lab_Dispositif.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_Dispositif);
+            var reset_Dispositif = document.createElement('div');
+            reset_Dispositif.innerHTML = 'clear filter';
+            reset_Dispositif.className = 'filterlabel';
+            lab_Dispositif.className = 'filterlabel';
+            reset_Dispositif.onclick = function() {
+                sel_Dispositif.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_Dispositif);
+            var sel_Dispositif = document.getElementById('div_Dispositif');
+            noUiSlider.create(sel_Dispositif, {
+                connect: true,
+                start: [0, 4],
+                step: 1,
+                format: wNumb({
+                    decimals: 0,
+                    }),
+                range: {
+                min: 0,
+                max: 4
+                }
+            });
+            sel_Dispositif.noUiSlider.on('update', function (values) {
+            filterVals =[];
+            for (value in values){
+            filterVals.push(parseInt(value))
+            }
+            val_Dispositif = document.getElementById('val_Dispositif');
+            val_Dispositif.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_IndicColl = document.createElement('div');
+            div_IndicColl.id = "div_IndicColl";
+            div_IndicColl.className= "filterselect";
+            document.getElementById("menu").appendChild(div_IndicColl);
+            sel_IndicColl = document.createElement('select');
+            sel_IndicColl.multiple = true;
+            sel_IndicColl.size = 5;
+            sel_IndicColl.id = "sel_IndicColl";
+            var IndicColl_options_str = "<option value='' unselected></option>";
+            sel_IndicColl.onchange = function(){filterFunc()};
+            IndicColl_options_str  += '<option value="Defavorise Eloigne">Defavorise Eloigne</option>';
+            IndicColl_options_str  += '<option value="Defavorise Proche">Defavorise Proche</option>';
+            IndicColl_options_str  += '<option value="Favorise Eloigne">Favorise Eloigne</option>';
+            IndicColl_options_str  += '<option value="Favorise Proche">Favorise Proche</option>';
+            IndicColl_options_str  += '<option value="Sans valeur">Sans valeur</option>';
+            sel_IndicColl.innerHTML = IndicColl_options_str;
+            div_IndicColl.appendChild(sel_IndicColl);
+            var lab_IndicColl = document.createElement('div');
+            lab_IndicColl.innerHTML = 'Indic Coll';
+            lab_IndicColl.className = 'filterlabel';
+            div_IndicColl.appendChild(lab_IndicColl);
+            var reset_IndicColl = document.createElement('div');
+            reset_IndicColl.innerHTML = 'clear filter';
+            reset_IndicColl.className = 'filterlabel';
+            reset_IndicColl.onclick = function() {
+                var options = document.getElementById("sel_IndicColl").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_IndicColl.appendChild(reset_IndicColl);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_IndicLyc = document.createElement('div');
+            div_IndicLyc.id = "div_IndicLyc";
+            div_IndicLyc.className= "filterselect";
+            document.getElementById("menu").appendChild(div_IndicLyc);
+            sel_IndicLyc = document.createElement('select');
+            sel_IndicLyc.multiple = true;
+            sel_IndicLyc.size = 5;
+            sel_IndicLyc.id = "sel_IndicLyc";
+            var IndicLyc_options_str = "<option value='' unselected></option>";
+            sel_IndicLyc.onchange = function(){filterFunc()};
+            IndicLyc_options_str  += '<option value="Lycees defavorises & eloignes">Lycees defavorises & eloignes</option>';
+            IndicLyc_options_str  += '<option value="Lycees defavorises & proches">Lycees defavorises & proches</option>';
+            IndicLyc_options_str  += '<option value="Lycees favorises & eloignes">Lycees favorises & eloignes</option>';
+            IndicLyc_options_str  += '<option value="Lycees favorises & proches">Lycees favorises & proches</option>';
+            IndicLyc_options_str  += '<option value="Sans valeur">Sans valeur</option>';
+            sel_IndicLyc.innerHTML = IndicLyc_options_str;
+            div_IndicLyc.appendChild(sel_IndicLyc);
+            var lab_IndicLyc = document.createElement('div');
+            lab_IndicLyc.innerHTML = 'Indic Lyc';
+            lab_IndicLyc.className = 'filterlabel';
+            div_IndicLyc.appendChild(lab_IndicLyc);
+            var reset_IndicLyc = document.createElement('div');
+            reset_IndicLyc.innerHTML = 'clear filter';
+            reset_IndicLyc.className = 'filterlabel';
+            reset_IndicLyc.onclick = function() {
+                var options = document.getElementById("sel_IndicLyc").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_IndicLyc.appendChild(reset_IndicLyc);
+        resetLabels([layer_CampusUB_10]);
+        map.on("zoomend", function(){
+            resetLabels([layer_CampusUB_10]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_CampusUB_10]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_CampusUB_10]);
+        });
+        </script>
+    </body>
+</html>
